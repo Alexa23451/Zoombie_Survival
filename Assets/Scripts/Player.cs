@@ -8,20 +8,8 @@ public class Player : MonoBehaviour {
     public int Health => health;
 	public GameObject bulletPrefab;
 	
-	void Update () {
 
-		if (Input.GetMouseButtonDown(0)) {
-            SoundManager.Instance.PlayAudio(SoundManager.Instance.shotSound);
-
-            GameObject bulletObject = Instantiate(bulletPrefab);
-            bulletObject.transform.position = this.transform.position;
-
-            Bullet bullet = bulletObject.GetComponent<Bullet>();
-            bullet.direction = transform.forward;
-
-        }
-	}
-
+    //Nhận damage
     public void TakeDamage(int healthAmount)
     {
         health -= healthAmount;

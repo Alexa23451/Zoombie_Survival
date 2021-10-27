@@ -20,6 +20,7 @@ public class PlayerMovement : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
     }
 
+    //Thực hiện update vị trí của chuột để nhìn xung quanh
     void Update()
     {
         float rotationX = transform.localEulerAngles.y + Input.GetAxis("Mouse X") * sensitivityX;

@@ -26,6 +26,7 @@ public class GameController : MonoBehaviour {
 		StartCoroutine(SpawnBarrel());
 	}
 
+	//Sản sinh ra thùng bom và mục tiêu (Target) trong quá trình game
 	IEnumerator SpawnBarrel()
     {
         while (true)
@@ -56,6 +57,7 @@ public class GameController : MonoBehaviour {
 
 	}
 
+	//Liên tục kiểm tra trạng thái của player và cập nhật GUI về tình trạng của game cho người chơi
     void Update () {
 		if (player.Health > 0) {
 			gameTimer += Time.deltaTime;

@@ -8,6 +8,7 @@ public class ExplosiveBarrelScript : MonoBehaviour {
 
 	//Used to check if the barrel 
 	//has been hit and should explode 
+	// Kiểm tra vụ nổ
 	public bool explode = false;
 
 	[Header("Prefabs")]
@@ -28,6 +29,8 @@ public class ExplosiveBarrelScript : MonoBehaviour {
 	//How powerful the explosion is
 	public float explosionForce = 4000.0f;
 	
+
+	//Kiểm tra xem thùng bom có bị bắn vào không
 	private void Update () {
 		//Generate random time based on min and max time values
 		randomTime = Random.Range (minTime, maxTime);
@@ -43,7 +46,8 @@ public class ExplosiveBarrelScript : MonoBehaviour {
 			} 
 		}
 	}
-	
+
+	//Xử lý vụ nổ
 	private IEnumerator Explode () {
 		//Wait for set amount of time
 		yield return new WaitForSeconds(randomTime);

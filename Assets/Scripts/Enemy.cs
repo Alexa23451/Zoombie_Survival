@@ -20,6 +20,7 @@ public class Enemy : MonoBehaviour {
 	public float eatingInterval = 0.5f;
 	private float eatingTimer = 0f;
 
+	//Hàm khởi tạo kẻ địch, gọi từ GameManager
 	public void Init(Player player, Action OnEnemyDead)
     {
 		chasingPlayer = true;
@@ -38,6 +39,7 @@ public class Enemy : MonoBehaviour {
 		OnEnemyDie = OnEnemyDead;
 	}
 
+	//Xử lý khi enemy chết
 	public void Dead()
     {
 		OnEnemyDie?.Invoke();
@@ -53,6 +55,8 @@ public class Enemy : MonoBehaviour {
 
 		Destroy(gameObject);
 	}
+
+	//Update di chuyển đến gần người chơi và gây tấn công giảm máu của ngươi chơi
 
 	void Update () {
 		if (Vector3.Distance (transform.position, _player.transform.position) < distanceToStop) {

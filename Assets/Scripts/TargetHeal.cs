@@ -7,12 +7,14 @@ public class TargetHeal : MonoBehaviour
     public GameObject vfxText;
     public Player _player;
 
+    //Khởi tạo thông tin cho Target
     public void Init(Player player, Action action)
     {
         OnTargetHit = action;
         _player = player;
     }
 
+    //Xử lý va chạm
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Player"))

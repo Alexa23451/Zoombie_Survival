@@ -7,6 +7,7 @@ public class Bullet : MonoBehaviour {
 	public Vector3 direction;
 	public float lifetime = 4f;
 
+	//update liên tục đường đi của viên đạn
 	void Update () {
 		transform.position += direction * speed * Time.deltaTime;
 
@@ -16,12 +17,16 @@ public class Bullet : MonoBehaviour {
 		}
 	}
 
+	//xử lý va chạm
 	void OnTriggerEnter (Collider collider) {
+
+		//va chạm với kẻ địch
 		if (collider.TryGetComponent(out Enemy enemy)) {
 			Destroy (this.gameObject);
 			enemy.Dead();
 		}
 
+		//va chạm với thùng bom
 		if (collider.TryGetComponent(out ExplosiveBarrelScript barrelScript))
 		{
 			barrelScript.explode = true;
