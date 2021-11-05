@@ -5,10 +5,10 @@ public class TargetHeal : MonoBehaviour
 {
     public event Action OnTargetHit;
     public GameObject vfxText;
-    public Player _player;
+    public PlayerController _player;
 
     //Khởi tạo thông tin cho Target
-    public void Init(Player player, Action action)
+    public void Init(PlayerController player, Action action)
     {
         OnTargetHit = action;
         _player = player;

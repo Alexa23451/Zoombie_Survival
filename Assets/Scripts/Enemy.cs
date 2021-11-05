@@ -10,7 +10,7 @@ public class Enemy : MonoBehaviour {
 
 
 	public Vector3 direction;
-	public Player _player;
+	public PlayerController _player;
 
 	public int damage = 3;
 	public float speed = 3.5f;
@@ -21,7 +21,7 @@ public class Enemy : MonoBehaviour {
 	private float eatingTimer = 0f;
 
 	//Hàm khởi tạo kẻ địch, gọi từ GameManager
-	public void Init(Player player, Action OnEnemyDead)
+	public void Init(PlayerController player, Action OnEnemyDead)
     {
 		chasingPlayer = true;
 		_player = player;

@@ -4,7 +4,9 @@ using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour {
 
-	public Player player;
+	public static GameController Instance;
+
+	public PlayerController player;
 	public GameObject enemyPrefab;
 	public GameObject targetPrefab;
 	public GameObject barrelPrefab;
@@ -16,21 +18,25 @@ public class GameController : MonoBehaviour {
 	public float minimumEnemyInterval = 0.5f;
 	public float enemyIntervalDecrement = 0.1f;
 
-	private float gameTimer = 0f;
+	public float gameTimer = 0f;
 	private float enemyTimer = 0f;
-	private float resetTimer = 3f;
 
-    private void Start()
-    {
+	public GameObject gameoverUI;
+
+	private void Start()
+	{
+		Instance = this;
+
+		Time.timeScale = 1;
 		Cursor.lockState = CursorLockMode.Locked;
 		StartCoroutine(SpawnBarrel());
 	}
 
 	//Sản sinh ra thùng bom và mục tiêu (Target) trong quá trình game
 	IEnumerator SpawnBarrel()
-    {
-        while (true)
-        {
+	{
+		while (true)
+		{
 			yield return new WaitForSeconds(4f);
 			GameObject barrelBom = Instantiate(barrelPrefab);
 
@@ -50,42 +56,69 @@ public class GameController : MonoBehaviour {
 				target2.transform.position.y,
 				player.transform.position.z + Mathf.Sin(randomAngle1) * UnityEngine.Random.Range(5f, 20f)
 			);
-			target2.transform.LookAt(player.transform); 
+			target2.transform.LookAt(player.transform);
 
-			target2.GetComponent<TargetHeal>().Init(player, () => player.TakeDamage(-2));
+			target2.GetComponent<TargetHeal>().Init(player, () => {
+				player.enemyKill++;
+				player.TakeDamage(-2);
+				player.GetScore(50);
+			} );
 		}
 
 	}
 
-	//Liên tục kiểm tra trạng thái của player và cập nhật GUI về tình trạng của game cho người chơi
-    void Update () {
-		if (player.Health > 0) {
+	void Update() {
+		SpawnEnemy();
+		GameOver();
+	}
+
+	//Kiểm tra gameover
+	void GameOver()
+	{
+		if (player.Health > 0)
+		{
 			gameTimer += Time.deltaTime;
 			infoText.text = "Health: " + player.Health;
-			infoText.text += "\nTime: " + Mathf.Floor (gameTimer);
-		} else {
+			infoText.text += "\nTime: " + Mathf.Floor(gameTimer);
+			infoText.text += "\nScore: " + player.Point;
+		}
+		else
+		{
 			infoText.text = "Game over!";
-			infoText.text += "\nYou survived for " + Mathf.Floor (gameTimer) + " seconds!";
+			infoText.text += "\nYou survived for " + Mathf.Floor(gameTimer) + " seconds!";
+			infoText.text += "\nYour Point: " + player.Point;
 
-			resetTimer -= Time.deltaTime;
-			if (resetTimer <= 0f) {
-				SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-			}
+			Time.timeScale = 0;
+			gameoverUI.SetActive(true);
+			gameoverUI.GetComponent<UIController>().SetRecord(infoText.text);
+			Cursor.lockState = CursorLockMode.Confined;
+			player.GetComponent<PlayerMovement>().enabled = false;
+
 		}
 
+
+	}
+
+	//gọi zoombie
+	void SpawnEnemy()
+    {
 		enemyTimer -= Time.deltaTime;
-		if (enemyTimer <= 0) {
+		if (enemyTimer <= 0)
+		{
 			enemyTimer = enemyInterval;
 			enemyInterval -= enemyIntervalDecrement;
 
-			if (enemyInterval < minimumEnemyInterval) {
+			if (enemyInterval < minimumEnemyInterval)
+			{
 				enemyInterval = minimumEnemyInterval;
 			}
 
 			GameObject enemyObject = Instantiate(enemyPrefab);
-			enemyObject.GetComponent<Enemy>().Init(player, () => player.TakeDamage(-2));
+			enemyObject.GetComponent<Enemy>().Init(player, () => 
+			{
+				player.GetScore(100);
+				player.TakeDamage(-2); 
+			});
 		}
 	}
-
-
 }
